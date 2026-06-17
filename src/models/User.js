@@ -1,8 +1,50 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
+
+/*
+|--------------------------------------------------------------------------
+| Preference Schema
+|--------------------------------------------------------------------------
+*/
+
+const preferenceSchema = new mongoose.Schema(
+  {
+    value: {
+      type: Number,
+      required: true,
+      min: 1,
+      max: 10,
+    },
+
+    weight: {
+      type: Number,
+      required: true,
+      min: 1,
+      max: 5,
+    },
+  },
+  {
+    _id: false,
+  }
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| User Schema
+|--------------------------------------------------------------------------
+*/
+
+
 const userSchema = new mongoose.Schema(
   {
+    /*
+    |--------------------------------------------------------------------------
+    | Authentication
+    |--------------------------------------------------------------------------
+    */
+
     name: {
       type: String,
       required: [true, "Name is required"],
@@ -24,6 +66,17 @@ const userSchema = new mongoose.Schema(
       select: false,
     },
 
+    avatar: {
+      type: String,
+      default: null,
+    },
+
+    /*
+    |--------------------------------------------------------------------------
+    | User Status
+    |--------------------------------------------------------------------------
+    */
+
     profileCompleted: {
       type: Boolean,
       default: false,
@@ -33,28 +86,105 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+
+    lastSeen: {
+      type: Date,
+      default: Date.now,
+    },
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reputation
+    |--------------------------------------------------------------------------
+    */
+
+    trustScore: {
+      type: Number,
+      default: 100,
+      min: 0,
+      max: 100,
+    },
+
+    /*
+    |--------------------------------------------------------------------------
+    | Basic Filters
+    |--------------------------------------------------------------------------
+    */
+
+    city: {
+      type: String,
+      trim: true,
+    },
+
+    state: {
+      type: String,
+      trim: true,
+    },
+
+    gender: {
+      type: String,
+      enum: ["male", "female", "other"],
+    },
+
+    budgetMin: {
+      type: Number,
+      min: 0,
+    },
+
+    budgetMax: {
+      type: Number,
+      min: 0,
+    },
+
+    /*
+    |--------------------------------------------------------------------------
+    | Lifestyle Preference Vector
+    |--------------------------------------------------------------------------
+    */
+
+    lifestylePreferences: {
+      sleepSchedule: preferenceSchema,
+
+      cleanliness: preferenceSchema,
+
+      studyStyle: preferenceSchema,
+
+      noiseTolerance: preferenceSchema,
+
+      guestFrequency: preferenceSchema,
+
+      foodPreference: preferenceSchema,
+
+      gamingFrequency: preferenceSchema,
+
+      smokingPreference: preferenceSchema,
+
+      drinkingPreference: preferenceSchema,
+
+      acPreference: preferenceSchema,
+    },
   },
   {
     timestamps: true,
   }
 );
 
+/*
+|--------------------------------------------------------------------------
+| Indexes
+|--------------------------------------------------------------------------
+*/
 
-// Encrypt password before saving user
-// userSchema.pre("save", async function (next) {
-//   if (!this.isModified("password")) {
-//     return next();
-//   }
+userSchema.index({
+  city: 1,
+  isActive: 1,
+});
 
-//   const salt = await bcrypt.genSalt(10);
+userSchema.index({
+  city: 1,
+  profileCompleted: 1,
+});
 
-//   this.password = await bcrypt.hash(
-//     this.password,
-//     salt
-//   );
-
-//   next();
-// });
 
 // Encrypt password before saving user
 userSchema.pre("save", async function () {
