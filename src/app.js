@@ -6,6 +6,8 @@ import notFound from "./middleware/notFound.js";
 
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import matchRoutes from "./routes/match.routes.js";
+import connectionRoutes from "./routes/connection.routes.js";
 
 const app = express();
 app.use(cookieParser());
@@ -52,6 +54,10 @@ app.get("/api/health", (req, res) => {
 app.use("/api/auth", authRoutes);
 
 app.use("/api/users", userRoutes);
+
+app.use("/api/matches", matchRoutes);
+
+app.use("/api/connections", connectionRoutes);
 
 // app.use("/api/auth", authRoutes);
 // app.use("/api/users", userRoutes);
