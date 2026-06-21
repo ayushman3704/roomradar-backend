@@ -98,12 +98,40 @@ const userSchema = new mongoose.Schema(
     |--------------------------------------------------------------------------
     */
 
-    trustScore: {
-      type: Number,
-      default: 100,
-      min: 0,
-      max: 100,
-    },
+trustScore: {
+  type: Number,
+  default: 100,
+  min: 0,
+  max: 100,
+},
+
+reviewStats: {
+  totalReviews: {
+    type: Number,
+    default: 0,
+  },
+
+  averageCleanliness: {
+    type: Number,
+    default: 0,
+    min: 0,
+    max: 5,
+  },
+
+  averageFinancialReliability: {
+    type: Number,
+    default: 0,
+    min: 0,
+    max: 5,
+  },
+
+  averageRespectsBoundaries: {
+    type: Number,
+    default: 0,
+    min: 0,
+    max: 5,
+  },
+},
 
     /*
     |--------------------------------------------------------------------------
@@ -183,6 +211,10 @@ userSchema.index({
 userSchema.index({
   city: 1,
   profileCompleted: 1,
+});
+
+userSchema.index({
+  trustScore: -1,
 });
 
 
