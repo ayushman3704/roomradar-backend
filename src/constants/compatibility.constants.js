@@ -94,3 +94,16 @@ export const ATTRIBUTE_LABELS = {
 
   acPreference: "AC Preference",
 };
+
+
+/*
+|--------------------------------------------------------------------------
+| Match Ranking Configuration
+|--------------------------------------------------------------------------
+*/
+
+export const MATCH_RANKING_CONFIG = {
+  LIFESTYLE_WEIGHT: 0.8,
+
+  TRUST_SCORE_WEIGHT: 0.2,
+};

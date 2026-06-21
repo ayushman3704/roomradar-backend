@@ -7,6 +7,15 @@ import {
   calculateCompatibility,
 } from "../services/compatibility.service.js";
 
+import {
+  MATCH_RANKING_CONFIG,
+} from "../constants/compatibility.constants.js";
+
+const {
+  LIFESTYLE_WEIGHT,
+  TRUST_SCORE_WEIGHT,
+} = MATCH_RANKING_CONFIG;
+
 const hasBudgetOverlap = (
   currentUser,
   candidate
@@ -56,28 +65,53 @@ export const getMatches =
   .map((candidate) => {
 
     const compatibility =
-      calculateCompatibility(
-        currentUser,
-        candidate
-      );
+  calculateCompatibility(
+    currentUser,
+    candidate
+  );
 
-    return {
-      userId: candidate._id,
-      name: candidate.name,
-      avatar: candidate.avatar,
-      city: candidate.city,
-      trustScore:
-        candidate.trustScore,
+/*
+|--------------------------------------------------------------------------
+| Final Ranking Score
+|--------------------------------------------------------------------------
+|
+| Lifestyle: 80%
+| Trust Score: 20%
+|
+*/
 
-      compatibilityScore:
-        compatibility.score,
+const finalScore =
+  Math.round(
+    compatibility.score *
+      LIFESTYLE_WEIGHT +
+    candidate.trustScore *
+      TRUST_SCORE_WEIGHT
+  );
 
-      strengths:
-        compatibility.strengths,
+return {
+  userId: candidate._id,
 
-      conflicts:
-        compatibility.conflicts,
-    };
+  name: candidate.name,
+
+  avatar: candidate.avatar,
+
+  city: candidate.city,
+
+  trustScore:
+    candidate.trustScore,
+
+  compatibilityScore:
+    finalScore,
+
+  lifestyleScore:
+    compatibility.score,
+
+  strengths:
+    compatibility.strengths,
+
+  conflicts:
+    compatibility.conflicts,
+  };
   });
 
     matches.sort(

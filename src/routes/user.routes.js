@@ -13,6 +13,10 @@ import {
   updateProfileSchema,
 } from "../validators/user.validator.js";
 
+import {
+  getUserReputation,
+} from "../controllers/user.controller.js";
+
 const router = express.Router();
 
 /*
@@ -32,6 +36,13 @@ router.put(
   protect,
   validate(updateProfileSchema),
   updateProfile
+);
+
+
+
+router.get(
+  "/:userId/reputation",
+  getUserReputation
 );
 
 /*

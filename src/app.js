@@ -9,6 +9,11 @@ import userRoutes from "./routes/user.routes.js";
 import matchRoutes from "./routes/match.routes.js";
 import connectionRoutes from "./routes/connection.routes.js";
 
+import chatRoutes from "./routes/chat.routes.js";
+
+import reviewRoutes
+  from "./routes/review.routes.js";
+
 const app = express();
 app.use(cookieParser());
 
@@ -58,6 +63,13 @@ app.use("/api/users", userRoutes);
 app.use("/api/matches", matchRoutes);
 
 app.use("/api/connections", connectionRoutes);
+
+app.use("/api/chat", chatRoutes);
+
+app.use(
+  "/api/reviews",
+  reviewRoutes
+);
 
 // app.use("/api/auth", authRoutes);
 // app.use("/api/users", userRoutes);
